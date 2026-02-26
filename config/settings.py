@@ -73,6 +73,36 @@ RETRIEVAL_CONFIG = {
     "top_k": 5,
     # 相似度阈值 (0-1)
     "similarity_threshold": 0.5,
+    # 候选池大小 (用于重排序)
+    "candidate_pool_size": 20,
+}
+
+# ==================== 混合检索配置 (基于 RAG 论文) ====================
+HYBRID_SEARCH_CONFIG = {
+    # 是否启用混合检索
+    "enabled": True,
+    # Dense Retrieval 权重
+    "dense_weight": 0.6,
+    # BM25 权重
+    "bm25_weight": 0.4,
+    # 是否使用 RRF (Reciprocal Rank Fusion)
+    "use_rrf": True,
+    # RRF 参数 k
+    "rrf_k": 60,
+}
+
+# ==================== 重排序配置 ====================
+RERANK_CONFIG = {
+    # 是否启用重排序
+    "enabled": True,
+    # 相似度权重
+    "similarity_weight": 0.5,
+    # 查询词覆盖率权重
+    "coverage_weight": 0.2,
+    # 结构相关性权重
+    "structure_weight": 0.2,
+    # 新鲜度权重
+    "freshness_weight": 0.1,
 }
 
 # ==================== Prompt 模板 ====================
