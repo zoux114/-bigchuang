@@ -231,7 +231,7 @@ class HybridSearcher:
         if self._bm25_index is None:
             # 只有 Dense 结果
             return [
-                SearchResult(doc=doc, score=score, source="dense")
+                SearchResult(document=doc, score=score, source="dense")
                 for doc, score in dense_results[:top_k]
             ]
 
@@ -275,7 +275,7 @@ class HybridSearcher:
         ranked = sorted(rrf_scores.items(), key=lambda x: x[1], reverse=True)[:top_k]
 
         return [
-            SearchResult(doc=doc_map[doc_id], score=score, source="hybrid")
+            SearchResult(document=doc_map[doc_id], score=score, source="hybrid")
             for doc_id, score in ranked
         ]
 
@@ -315,7 +315,7 @@ class HybridSearcher:
         ranked = sorted(fused_scores.items(), key=lambda x: x[1], reverse=True)[:top_k]
 
         return [
-            SearchResult(doc=all_docs[doc_id], score=score, source="hybrid")
+            SearchResult(document=all_docs[doc_id], score=score, source="hybrid")
             for doc_id, score in ranked
         ]
 
@@ -324,8 +324,11 @@ class HybridSearcher:
         if self._bm25_index:
             self._bm25_index.save(path)
 
-    def load_bm25_index(self, path: Path) -> bool:
+    def load_bm25_index(self, path) -> bool:
         """加载 BM25 索引"""
+        from pathlib import Path
+        path = Path(path) if not isinstance(path, Path) else path
+
         self._bm25_index = BM25Index()
         return self._bm25_index.load(path)
 

@@ -57,8 +57,17 @@ class VectorStore:
         hashes_path = self.db_path / f"{self.index_name}.hashes"
 
         if index_path.exists():
-            self._index = faiss.read_index(str(index_path))
-            print(f"加载索引: {index_path} (共 {self._index.ntotal} 个向量)")
+            try:
+                # 使用 deserialize_index 避免中文路径问题
+                with open(str(index_path), "rb") as f:
+                    index_bytes = f.read()
+                # 将 bytes 转换为 numpy 数组
+                index_array = np.frombuffer(index_bytes, dtype=np.uint8)
+                self._index = faiss.deserialize_index(index_array)
+                print(f"加载索引: {index_path} (共 {self._index.ntotal} 个向量)")
+            except Exception as e:
+                print(f"加载索引失败: {e}")
+                self._index = None
 
         if docs_path.exists():
             with open(docs_path, "rb") as f:
@@ -77,7 +86,14 @@ class VectorStore:
         hashes_path = self.db_path / f"{self.index_name}.hashes"
 
         if self._index is not None:
-            faiss.write_index(self._index, str(index_path))
+            try:
+                # 使用 serialize_index 避免中文路径问题
+                index_bytes = faiss.serialize_index(self._index)
+                with open(str(index_path), "wb") as f:
+                    f.write(index_bytes)
+            except Exception as e:
+                print(f"保存索引失败: {e}")
+                raise
 
         with open(docs_path, "wb") as f:
             pickle.dump(self._documents, f)

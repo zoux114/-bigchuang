@@ -195,20 +195,27 @@ class DocumentProcessor:
 
     def _table_to_markdown(self, table) -> str:
         """将 Word 表格转换为 Markdown 格式"""
-        rows = []
+        rows_data = []
         for row in table.rows:
             cells = [cell.text.strip().replace("\n", " ") for cell in row.cells]
-            rows.append("| " + " | ".join(cells) + " |")
+            rows_data.append(cells)
 
-        if not rows:
+        if not rows_data:
             return ""
 
-        # 添加表头分隔符
-        if len(rows) > 1:
-            separator = "| " + " | ".join(["---"] * len(rows[0].split("|"))-2) + " |"
-            rows.insert(1, separator)
+        # 构建 Markdown 表格
+        num_cols = len(rows_data[0])
+        md_lines = []
 
-        return "\n".join(rows)
+        # 表头
+        md_lines.append("| " + " | ".join(rows_data[0]) + " |")
+        # 分隔符
+        md_lines.append("| " + " | ".join(["---"] * num_cols) + " |")
+        # 数据行
+        for cells in rows_data[1:]:
+            md_lines.append("| " + " | ".join(cells) + " |")
+
+        return "\n".join(md_lines)
 
     def _get_output_path(self, input_path: Path) -> Path:
         """获取输出文件路径"""
