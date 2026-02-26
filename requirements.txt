@@ -1,0 +1,26 @@
+# Core dependencies
+torch>=2.0.0
+transformers>=4.30.0
+sentence-transformers>=2.2.0
+
+# Vector database
+faiss-cpu>=1.7.4
+# faiss-gpu>=1.7.4  # Uncomment if using GPU
+
+# Document processing
+python-docx>=0.8.11
+PyPDF2>=3.0.0
+pdfplumber>=0.9.0
+chardet>=5.2.0
+
+# LLM
+openai>=1.0.0
+
+# Utilities
+python-dotenv>=1.0.0
+tqdm>=4.65.0
+watchdog>=3.0.0
+pyyaml>=6.0
+
+# Optional: for better PDF parsing
+# pymupdf>=1.23.0
