@@ -13,7 +13,24 @@ PROJECT_ROOT = Path(__file__).parent.parent
 DATA_DIR = PROJECT_ROOT / "data"
 RAW_DATA_DIR = DATA_DIR / "raw"
 PROCESSED_DATA_DIR = DATA_DIR / "processed"
-VECTOR_DB_DIR = DATA_DIR / "vector_db"
+
+
+def _resolve_project_path(path_value: str, default_path: Path) -> Path:
+    """将环境变量中的路径解析为绝对路径，支持相对项目根目录。"""
+    raw_value = (path_value or "").strip()
+    if not raw_value:
+        return default_path
+
+    candidate = Path(raw_value)
+    if candidate.is_absolute():
+        return candidate
+    return PROJECT_ROOT / candidate
+
+
+VECTOR_DB_DIR = _resolve_project_path(
+    os.getenv("VECTOR_DB_DIR", ""),
+    DATA_DIR / "vector_db",
+)
 MODELS_DIR = PROJECT_ROOT / "models"
 
 # 确保目录存在
@@ -34,8 +51,8 @@ EMBEDDING_CONFIG = {
 # ==================== LLM API 配置 ====================
 LLM_CONFIG = {
     "api_key": os.getenv("LLM_API_KEY", ""),
-    "base_url": os.getenv("LLM_BASE_URL", "https://api.deepseek.com/v1"),
-    "model": os.getenv("LLM_MODEL", "deepseek-chat"),
+    "base_url": os.getenv("LLM_BASE_URL", "https://spark-api-open.xf-yun.com/v2/"),
+    "model": os.getenv("LLM_MODEL", "spark-x"),
     "temperature": 0.7,
     "max_tokens": 2048,
 }

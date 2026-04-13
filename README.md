@@ -7,7 +7,7 @@
 - **本地化 Embedding**: 使用 PyTorch 加载开源中文向量模型，无需外部 API
 - **智能文档处理**: 自动识别 PDF/Docx/TXT，保留规章制度层级结构
 - **增量索引**: 只处理新增或修改的文件，避免重复计算
-- **灵活配置**: 支持 OpenAI 兼容 API (DeepSeek、智谱等)
+- **灵活配置**: 支持 OpenAI 兼容 API (讯飞星火、DeepSeek、智谱等)
 
 ## 技术栈
 
@@ -51,30 +51,73 @@
 └── requirements.txt
 ```
 
-## 快速开始
+## 🚀 一键安装
 
-### 1. 安装依赖
+### 最简单的方式
+
+**Windows**:
+```bash
+# 双击运行或在 PowerShell 中执行
+python install.py
+# 或运行批处理脚本
+install.bat
+```
+
+**Linux/macOS**:
+```bash
+python install.py
+```
+
+一键安装程序会自动：
+- ✓ 检查 Python 版本和可用模块
+- ✓ 检测 GPU 支持
+- ✓ 创建必要的目录结构
+- ✓ 安装所有 Python 和 Node.js 依赖
+- ✓ 创建配置文件模板
+- ✓ 构建前端（如果已安装 Node.js）
+
+详细安装说明请查看 [INSTALL.md](INSTALL.md)
+
+### 系统诊断
+
+如果遇到问题，运行诊断工具：
 
 ```bash
-# 创建虚拟环境
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-# venv\Scripts\activate   # Windows
-
-# 安装依赖
-pip install -r requirements.txt
+python doctor.py
 ```
+
+会检查：
+- Python 版本和模块
+- GPU 可用性
+- 目录和文件完整性
+- 配置文件
+- 系统资源（内存、磁盘）
+
+---
+
+## 快速开始
+
+### 1. 一键安装
+
+详见上方 **一键安装** 部分
 
 ### 2. 配置 API
 
-```bash
-# 复制配置模板
-cp config/.env.example config/.env
+编辑 `config/.env` 文件：
 
-# 编辑配置文件，填入你的 API Key
-# LLM_API_KEY=your_api_key_here
-# LLM_BASE_URL=https://api.deepseek.com/v1  # 或其他兼容 API
+```bash
+# LLM API 配置（必需）
+LLM_API_KEY=your_api_key_here
+LLM_BASE_URL=https://spark-api-open.xf-yun.com/v2/
+LLM_MODEL=spark-x
 ```
+
+支持的 LLM 服务：
+- 讯飞星火（默认）
+- OpenAI
+- DeepSeek
+- 智谱 (zhipu)
+- 其他 OpenAI 兼容 API
 
 ### 3. 准备文档
 
@@ -142,9 +185,9 @@ EMBEDDING_MODEL_NAME = "shibing624/text2vec-base-chinese"
 EMBEDDING_DEVICE = "cuda"  # 或 "cpu"
 
 # LLM API 配置
-LLM_API_KEY = "your_api_key"
-LLM_BASE_URL = "https://api.deepseek.com/v1"
-LLM_MODEL = "deepseek-chat"
+LLM_API_KEY = "your_api_password_or_AK:SK"
+LLM_BASE_URL = "https://spark-api-open.xf-yun.com/v2/"
+LLM_MODEL = "spark-x"
 
 # 检索配置
 TOP_K = 5  # 检索返回的文档数量
@@ -176,6 +219,65 @@ for source in sources:
 2. 建议使用 GPU 加速向量化过程
 3. PDF 文档如有扫描件，需先进行 OCR 处理
 4. 增量索引基于文件修改时间判断
+
+## Docker 部署 (推荐线上)
+
+适用于“所有人访问网站，不吃本地用户算力”的部署方式。
+
+### 1. 准备环境变量
+
+确保 `config/.env` 已配置可用的 LLM 参数，例如：
+
+```env
+LLM_API_KEY=your_api_password_or_AK:SK
+LLM_BASE_URL=https://spark-api-open.xf-yun.com/v2/
+LLM_MODEL=spark-x
+VECTOR_DB_DIR=data/vector_precomputed
+EMBEDDING_DEVICE=cpu
+```
+
+线上建议默认 `EMBEDDING_DEVICE=cpu`，避免宿主机 GPU/驱动耦合问题。
+
+### 1.1 预先向量化（推荐）
+
+可在部署前提前完成向量分块和索引构建，减少线上实时算力消耗。
+
+```bash
+# 首次或文档大规模更新时
+python ingest.py --force
+
+# 仅文档有少量变动时，走增量索引
+python ingest.py
+```
+
+默认向量目录可通过 `VECTOR_DB_DIR` 单独配置，例如 `data/vector_precomputed`。
+部署时只需携带该目录即可直接查询，无需重复全量向量化。
+
+### 2. 构建并启动
+
+```bash
+docker compose up -d --build
+```
+
+启动后访问：`http://<服务器IP>:8000`
+
+### 3. 查看日志
+
+```bash
+docker compose logs -f rag-backend
+```
+
+### 4. 停止服务
+
+```bash
+docker compose down
+```
+
+### 5. 更新代码后重启
+
+```bash
+docker compose up -d --build
+```
 
 ## License
 
