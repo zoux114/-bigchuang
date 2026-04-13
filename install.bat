@@ -76,19 +76,9 @@ if errorlevel 1 (
     echo [警告] Python 依赖安装可能出现问题，请查看上述输出
 )
 
-REM ========== 检查 GPU ==========
-echo.
-echo [5/7] 检查 GPU 支持...
-python -c "import torch; print('GPU 可用:', torch.cuda.is_available())" 2>nul
-if errorlevel 1 (
-    echo [提示] PyTorch 未安装或无 GPU
-) else (
-    echo [成功] GPU 检查完成
-)
-
 REM ========== 检查 Node.js 和前端 ==========
 echo.
-echo [6/7] 检查 Node.js 和前端...
+echo [5/6] 检查 Node.js 和前端...
 where node >nul 2>nul
 if errorlevel 1 (
     echo [警告] Node.js 未安装，跳过前端设置
@@ -119,7 +109,7 @@ if not exist "frontend\dist\index.html" (
 
 REM ========== 验证安装 ==========
 echo.
-echo [7/7] 验证安装...
+echo [6/6] 验证安装...
 python -c "import torch, transformers, sentence_transformers, faiss, fastapi; print('[成功] 所有关键模块已安装')" 2>nul
 if errorlevel 1 (
     echo [警告] 某些模块可能未安装

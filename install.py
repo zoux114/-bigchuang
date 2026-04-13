@@ -127,25 +127,6 @@ class Installer:
         self.print_success(f"npm 版本: {npm_version}")
         return True
     
-    def check_torch_gpu(self) -> bool:
-        """检查 GPU 支持（PyTorch）"""
-        self.print_info("检查 GPU 支持...")
-        
-        try:
-            import torch
-            has_cuda = torch.cuda.is_available()
-            
-            if has_cuda:
-                cuda_version = torch.version.cuda
-                gpu_name = torch.cuda.get_device_name(0)
-                self.print_success(f"GPU 可用: {gpu_name} (CUDA {cuda_version})")
-                return True
-            else:
-                self.print_warning("GPU 不可用，将使用 CPU 进行 Embedding")
-                return False
-        except ImportError:
-            return False
-    
     def create_directories(self) -> bool:
         """创建必要的目录"""
         self.print_info("创建任务目录...")
@@ -187,7 +168,7 @@ LLM_MODEL=spark-x
 # ==================== Embedding 模型 ====================
 # 可选: shibing624/text2vec-base-chinese, BAAI/bge-small-zh-v1.5
 EMBEDDING_MODEL=shibing624/text2vec-base-chinese
-EMBEDDING_DEVICE=auto
+EMBEDDING_DEVICE=cpu
 
 # ==================== 向量数据库 ====================
 VECTOR_DB_DIR=data/vector_db
@@ -216,9 +197,6 @@ LOG_LEVEL=INFO
             self.print_error(f"未找到 requirements.txt: {requirements_file}")
             return False
         
-        # 检查是否使用 GPU 轮子
-        has_gpu = self.check_torch_gpu()
-        
         # 安装基础依赖
         success, output = self.run_command(
             [sys.executable, "-m", "pip", "install", "-r", str(requirements_file)],
@@ -229,23 +207,7 @@ LOG_LEVEL=INFO
             self.print_error(f"安装依赖失败: {output}")
             return False
         
-        self.print_success("Python 依赖安装完成")
-        
-        # 根据 GPU 情况安装 PyTorch
-        if has_gpu:
-            self.print_info("安装 GPU 版本 PyTorch...")
-            # 如果项目根目录有 wheels 文件夹，使用本地 wheels
-            wheels_dir = self.project_root / "wheels"
-            if wheels_dir.exists():
-                self.print_info(f"从本地 wheels 目录安装: {wheels_dir}")
-                torch_whl = list(wheels_dir.glob("torch*"))
-                if torch_whl:
-                    success, _ = self.run_command(
-                        [sys.executable, "-m", "pip", "install"] + [str(w) for w in torch_whl],
-                        description="安装本地 PyTorch wheels"
-                    )
-                    if success:
-                        self.print_success("PyTorch GPU 版本安装成功")
+        self.print_success("Python 依赖安装完成（CPU 模式）")
         
         return True
     

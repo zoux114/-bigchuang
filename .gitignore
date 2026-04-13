@@ -14,6 +14,14 @@ ENV/
 *.swp
 *.swo
 
+# Frontend
+frontend/node_modules/
+frontend/dist/
+
+# GPU artifacts
+wheels/
+.venv-gpu/
+
 # 环境变量（包含 API Key，不应上传）
 config/.env
 

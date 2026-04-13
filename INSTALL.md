@@ -176,19 +176,9 @@ models/               # 模型缓存目录
 - Vite 8+
 - Tailwind CSS 3+
 
-### 4. GPU 支持（可选）
+### 4. CPU 运行说明（推荐）
 
-如果检测到 GPU，安装程序会提示安装 CUDA 加速的 PyTorch。
-
-**手动安装 GPU 版本 PyTorch**:
-
-```bash
-# CUDA 12.1
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
-
-# 或使用本地 wheels（如果项目包含）
-pip install wheels/torch*.whl wheels/torchvision*.whl wheels/torchaudio*.whl
-```
+默认使用 CPU 模式运行，安装脚本会直接安装通用依赖，无需 CUDA。
 
 ## 常见问题
 
@@ -200,13 +190,9 @@ pip install wheels/torch*.whl wheels/torchvision*.whl wheels/torchaudio*.whl
 pip install torch transformers sentence-transformers faiss-cpu
 ```
 
-### Q: GPU 未被识别？
+### Q: 运行较慢怎么办？
 
-**A**: 确保已安装 CUDA 和 cuDNN，然后重新安装 PyTorch GPU 版本
-
-```bash
-pip install torch --index-url https://download.pytorch.org/whl/cu121
-```
+**A**: 可以适当降低批大小，或减少一次处理的文档规模。
 
 ### Q: 前端无法访问？
 
