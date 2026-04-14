@@ -3,10 +3,10 @@ FROM node:20-alpine AS frontend-builder
 WORKDIR /app/frontend
 
 COPY frontend/package*.json ./
-RUN npm install
+RUN npm config set registry https://registry.npmmirror.com && npm install
 
 COPY frontend/ ./
-RUN npm run build
+RUN npm config set registry https://registry.npmmirror.com && npm run build
 
 
 FROM python:3.12-slim AS runtime
