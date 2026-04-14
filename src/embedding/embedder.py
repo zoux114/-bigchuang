@@ -23,7 +23,7 @@ class Embedder:
 
         Args:
             model_name: 模型名称，默认使用配置文件中的设置
-            device: 计算设备 (cuda/cpu)
+            device: 计算设备（默认 cpu）
         """
         self.model_name = model_name or EMBEDDING_CONFIG["model_name"]
         self.device = device or EMBEDDING_CONFIG["device"]

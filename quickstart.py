@@ -209,8 +209,8 @@ class QuickStart:
   Q: 前端无法访问?
   A: 确保已安装 Node.js，运行选项 5 构建
 
-  Q: GPU 未被使用?
-  A: 运行选项 2 诊断，检查 CUDA/cuDNN 配置
+    Q: 运行速度较慢?
+    A: 运行选项 2 诊断，确认模型与索引配置
 
 【文档】
   - 详细安装: INSTALL.md

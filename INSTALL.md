@@ -12,7 +12,6 @@
 
 ### 可选
 
-- **GPU**: 支持 CUDA 11.8+ 的 NVIDIA GPU（可选，用于加速 Embedding）
 - **Node.js**: 12.20+（仅为构建前端需要）
 
 ## 快速安装
@@ -133,7 +132,7 @@ LLM_MODEL=spark-x
 
 # 其他配置
 EMBEDDING_MODEL=shibing624/text2vec-base-chinese
-EMBEDDING_DEVICE=auto  # 或 'cuda' / 'cpu'
+EMBEDDING_DEVICE=cpu
 VECTOR_DB_DIR=data/vector_db
 LOG_LEVEL=INFO
 ```
@@ -150,7 +149,7 @@ python -c "import torch, transformers, sentence_transformers, faiss, fastapi; pr
 
 ### 1. 环境检查
 - ✓ Python 版本验证
-- ✓ GPU 可用性检查
+- ✓ CPU 运行环境检查
 - ✓ 依赖模块扫描
 
 ### 2. 创建目录结构
@@ -270,7 +269,7 @@ python api_server.py
 # 轻量级模型（推荐用于 CPU）
 EMBEDDING_MODEL=BAAI/bge-small-zh-v1.5
 
-# 更好的效果（需要更多 GPU 内存）
+# 更好的效果（需要更多内存）
 EMBEDDING_MODEL=BAAI/bge-base-zh-v1.5
 ```
 

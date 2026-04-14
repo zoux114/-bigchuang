@@ -13,7 +13,7 @@ from dataclasses import dataclass, asdict
 try:
     import faiss
 except ImportError:
-    raise ImportError("请安装 faiss: pip install faiss-cpu 或 faiss-gpu")
+    raise ImportError("请安装 faiss: pip install faiss-cpu")
 
 from config.settings import VECTOR_STORE_CONFIG, RETRIEVAL_CONFIG
 

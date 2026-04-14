@@ -130,41 +130,6 @@ class Diagnostics:
         
         return all_ok
     
-    def check_gpu(self) -> bool:
-        """检查 GPU"""
-        self.print_header("GPU 加速")
-        
-        try:
-            import torch
-            
-            if torch.cuda.is_available():
-                gpu_count = torch.cuda.device_count()
-                gpu_name = torch.cuda.get_device_name(0)
-                cuda_version = torch.version.cuda
-                cudnn_version = torch.backends.cudnn.version()
-                
-                self.check_ok("CUDA", f"v{cuda_version}")
-                self.check_ok("cuDNN", f"v{cudnn_version}")
-                self.check_ok(f"GPU ({gpu_count})", gpu_name)
-                
-                # GPU 内存
-                if hasattr(torch.cuda, 'get_device_properties'):
-                    props = torch.cuda.get_device_properties(0)
-                    total_memory_gb = props.total_memory / 1024 / 1024 / 1024
-                    print(f"   显存: {total_memory_gb:.2f} GB")
-                
-                return True
-            else:
-                self.check_warning("GPU", "未检测到 CUDA 设备")
-                print(f"   将使用 CPU")
-                return True
-        except ImportError:
-            self.check_error("GPU", "PyTorch 未安装")
-            return False
-        except Exception as e:
-            self.check_error("GPU", str(e))
-            return False
-    
     def check_directories(self) -> bool:
         """检查目录结构"""
         self.print_header("目录结构")
@@ -374,7 +339,6 @@ class Diagnostics:
         
         self.check_python()
         self.check_modules()
-        self.check_gpu()
         self.check_directories()
         self.check_files()
         self.check_config()

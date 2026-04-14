@@ -70,7 +70,7 @@ python install.py
 
 一键安装程序会自动：
 - ✓ 检查 Python 版本和可用模块
-- ✓ 检测 GPU 支持
+- ✓ 检测 CPU 运行环境
 - ✓ 创建必要的目录结构
 - ✓ 安装所有 Python 和 Node.js 依赖
 - ✓ 创建配置文件模板
@@ -88,7 +88,7 @@ python doctor.py
 
 会检查：
 - Python 版本和模块
-- GPU 可用性
+- CPU 运行配置
 - 目录和文件完整性
 - 配置文件
 - 系统资源（内存、磁盘）
@@ -161,7 +161,7 @@ python query.py "公司请假制度的具体规定是什么？"
 
 - 本地加载 `shibing624/text2vec-base-chinese` 模型
 - 支持批量向量化，提升处理效率
-- 自动 GPU 加速 (如果可用)
+- 默认 CPU 模式运行
 
 ### 向量检索 (`src/retrieval/`)
 
@@ -182,7 +182,7 @@ python query.py "公司请假制度的具体规定是什么？"
 ```python
 # Embedding 模型配置
 EMBEDDING_MODEL_NAME = "shibing624/text2vec-base-chinese"
-EMBEDDING_DEVICE = "cuda"  # 或 "cpu"
+EMBEDDING_DEVICE = "cpu"
 
 # LLM API 配置
 LLM_API_KEY = "your_api_password_or_AK:SK"
@@ -216,7 +216,7 @@ for source in sources:
 ## 注意事项
 
 1. 首次运行会自动下载 Embedding 模型 (~400MB)
-2. 建议使用 GPU 加速向量化过程
+2. 默认 CPU 模式，便于跨环境稳定部署
 3. PDF 文档如有扫描件，需先进行 OCR 处理
 4. 增量索引基于文件修改时间判断
 
@@ -236,7 +236,7 @@ VECTOR_DB_DIR=data/vector_precomputed
 EMBEDDING_DEVICE=cpu
 ```
 
-线上建议默认 `EMBEDDING_DEVICE=cpu`，避免宿主机 GPU/驱动耦合问题。
+线上建议固定 `EMBEDDING_DEVICE=cpu`，保证环境一致性。
 
 ### 1.1 预先向量化（推荐）
 

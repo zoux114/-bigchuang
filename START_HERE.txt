@@ -12,7 +12,7 @@
 
   ✅ install.py
      初次安装和环境配置的完整解决方案
-     - 检查 Python/GPU/Node.js
+   - 检查 Python/CPU/Node.js
      - 安装所有依赖
      - 创建目录结构
      - 生成配置文件
@@ -21,7 +21,7 @@
   ✅ install.bat
      Windows 原生启动脚本
      - 自动检查并安装
-     - 支持本地 Wheels
+   - 纯 CPU 依赖安装
      用法: 双击或 install.bat
 
   ✅ doctor.py
@@ -121,13 +121,13 @@
 
   🔍 自动环境检查
     ✓ Python 版本检查 (需要 3.8+)
-    ✓ GPU 检测和优化
+   ✓ CPU 运行环境检查
     ✓ Node.js/npm 检查
     ✓ 磁盘和内存检查
     ✓ 网络连接验证
 
   📦 一键依赖安装
-    ✓ PyTorch (支持 GPU)
+   ✓ PyTorch (CPU)
     ✓ Transformers 和 Sentence-Transformers
     ✓ FAISS 向量数据库
     ✓ FastAPI 和 Uvicorn
@@ -196,8 +196,8 @@
   问题: 前端无法访问
   解决: 装 Node.js，运行 python install.py
 
-  问题: GPU 未被使用
-  解决: 装 CUDA 12.1+，运行 python install.py
+   问题: 运行速度较慢
+   解决: 运行 python doctor.py 检查环境并优化参数
 
   问题: API 认证失败
   解决: 检查 config/.env 中的 LLM_API_KEY
@@ -247,8 +247,8 @@
   ✅ 跨平台支持
      在 Windows、Mac 和 Linux 上都能完美运行
 
-  ✅ GPU 优化
-     自动检测和配置 GPU，支持 CUDA 加速
+  ✅ CPU 优化
+     默认使用 CPU 模式，降低环境依赖
 
   ✅ 错误恢复
      完整的错误处理和恢复机制
@@ -259,8 +259,8 @@
   ✅ 详细诊断
      包含 26 项系统检查，深度诊断问题
 
-  ✅ 本地 Wheels
-     支持从本地 wheels 文件夹安装 PyTorch
+  ✅ 稳定依赖安装
+     使用统一 CPU 依赖，跨平台更稳定
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

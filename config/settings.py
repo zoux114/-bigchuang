@@ -41,7 +41,7 @@ for dir_path in [RAW_DATA_DIR, PROCESSED_DATA_DIR, VECTOR_DB_DIR, MODELS_DIR]:
 EMBEDDING_CONFIG = {
     # 可选: shibing624/text2vec-base-chinese, BAAI/bge-small-zh-v1.5
     "model_name": os.getenv("EMBEDDING_MODEL", "shibing624/text2vec-base-chinese"),
-    "device": os.getenv("EMBEDDING_DEVICE", "cuda" if os.getenv("CUDA_VISIBLE_DEVICES") else "cpu"),
+    "device": os.getenv("EMBEDDING_DEVICE", "cpu"),
     "max_seq_length": 256,
     "batch_size": 32,
     # 本地模型缓存目录
